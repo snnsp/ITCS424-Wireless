@@ -11,12 +11,29 @@ class FindMe extends StatefulWidget {
 class FineMeState extends State<FindMe> {
   String current_location = "";
   String currentAddress = "";
+
   getLocation() async {
+    var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
       current_location =
-          "Latitude: ${position.latitude} Longtitude: ${position.longitude}\nAccuracy: ${position.accuracy}";
+          "Latitude: ${position.latitude} Longtitude: ${position.longitude}";
     });
     try {} catch (error) {
       print(error);
@@ -83,6 +100,7 @@ class FineMeState extends State<FindMe> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

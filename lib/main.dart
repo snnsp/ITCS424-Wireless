@@ -23,8 +23,7 @@ class FirstRoute extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            PageTransition(
-                type: PageTransitionType.leftToRight, child: MapFunction()),
+            PageTransition(type: PageTransitionType.leftToRight, child: map()),
           );
         },
       ),

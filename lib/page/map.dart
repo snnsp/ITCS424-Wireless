@@ -1,29 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapFunction extends StatelessWidget {
-  const MapFunction({Key? key}) : super(key: key);
+class map extends StatefulWidget {
+  @override
+  _mapState createState() => _mapState();
+}
 
-  Widget build_back_button(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      child: const Text('Go back!'),
-    );
-  }
-
+class _mapState extends State<map> {
+  Completer<GoogleMapController> _controller = Completer();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Google Map function'),
+        title: Text("Google Map"),
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: LatLng(13.757429, 100.502465),
-          zoom: 15,
+          target: LatLng(13.736717, 100.523186), // Bangkok Location
+          zoom: 11,
         ),
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
       ),
     );
   }
